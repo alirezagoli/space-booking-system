@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx
+		 http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="ir"/>
+    <context:annotation-config/>
+    <context:spring-configured/>
+
+    <bean id="DataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="" />
+        <property name="username" value="" />
+        <property name="password" value="" />
+    </bean>
+
+   <!-- <bean id="defaulLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />-->
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="DataSource" />
+        <property name="annotatedPackages">
+            <list>
+                <value>ir.ac.iut.reservation.model</value>
+                <!--<value>ir.ac.iut.reservation.dao</value>-->
+            </list>
+        </property>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</prop>
+
+                <prop key="hibernate.connection.url"></prop>
+                <!--<prop key="hibernate.connection.url"> postgres://iswniqhinjwscy:NbiI_-_wP4bg1OsW5jt4L_5qsu@ec2-54-243-54-21.compute-1.amazonaws.com:5432/dashb2k78sq61p</prop>-->
+                <prop key="hibernate.connection.driver_class">org.postgresql.Driver</prop>
+                <!--<prop key="hibernate.connection.driver_class">org.postgresql.Driver</prop>-->
+                <prop key="hibernate.id.new_generator_mappings">false</prop>
+                <prop key="hibernate.connection.CharSet">utf8</prop>
+                <prop key="hibernate.connection.characterEncoding">utf8</prop>
+                <prop key="hibernate.connection.useUnicode">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+        <property name="packagesToScan" value="ir.ac.iut.reservation.model"/>
+    </bean>
+
+
+
+<!--    <bean id="DemopfServicio" class="com.demopf.servicio.DemopfServicioImp">
+        <property name="demopfDAO" ref="demopfDAO" />
+    </bean>
+
+    <bean id="demopfDAO" class="com.demopf.modelo.dao.DemopfDAOImp">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>-->
+
+    <tx:annotation-driven transaction-manager="txManager" />
+    <bean id="txManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+</beans>

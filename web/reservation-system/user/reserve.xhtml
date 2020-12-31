@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xml:lang="en" lang="en">
+
+<h:head>
+    <title>IUT Reservation Systm</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <h:outputStylesheet library="css" name="bootstrap.min.css"></h:outputStylesheet>
+    <h:outputStylesheet library="css" name="bootstrap-theme.min.css"></h:outputStylesheet>
+    <h:outputStylesheet library="css" name="font-awesome.min.css"></h:outputStylesheet>
+    <h:outputStylesheet library="css" name="bootstrap-social.css"></h:outputStylesheet>
+    <h:outputScript library="javascript" name="bootstrap.min.js"></h:outputScript>
+</h:head>
+
+<h:body>
+    <h:form>
+        <div class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="placeStatus.xhtml">IUT Reservation System</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li  >
+                            <p:link outcome="placeStatus" value="Place Status"></p:link>
+                        </li>
+                        <li class="active">
+                            <p:link outcome="reserve" value="Reserve"></p:link>
+                        </li>
+                        <li >
+                            <p:link outcome="myReservationStatus" value="My Reservation Status"></p:link>
+                        </li>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><p:link outcome="/logout.xhtml" value="Logout"></p:link></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </div>
+    </h:form>
+
+    <h:form>
+
+        <p:growl id="growl"  showDetail="true"/>
+
+        <p:wizard flowListener="#{reserveMB.onFlowProcess}" style="margin: 1%">
+            <p:tab id="placeTab" title="Place">
+                <p:dataTable var="place" value="#{reserveMB.placeList}" widgetVar="placesTable"
+                             emptyMessage="No place found with given criteria" filteredValue="#{reserveMB.filteredPlaceList}"
+                             style="margin-top: 0.5%" scrollable="true" scrollHeight="250"   reflow="true"
+                             selection="#{reserveMB.selectedPlace}" rowKey="#{place.id}">
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Choose your prefered palce" />
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column selectionMode="single" headerText="Selection"  style="width: 10% ;text-align:center"/>
+
+                    <p:column filterBy="#{place.name}" headerText="Name"  filterMatchMode="contains" filterStyle="width: 99%">
+                        <h:outputText value="#{place.name}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.capacity}" headerText="Capacity"  filterMatchMode="gte"  >
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('placesTable').filter()" size="3" styleClass="year-spinner"   >
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText value="#{place.capacity}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.nPC}" headerText="nPC"   filterMatchMode="gte">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('placesTable').filter()" size="3" styleClass="nPC-spinner">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <h:outputText value="#{place.nPC}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.hasVideoProjector}" headerText="VideoProjector" filterMatchMode="equals" style="font-size: 85%;">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('placesTable').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{place.hasVideoProjector ? 'Yes': 'No'}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.hasAirConditioner}" headerText="Air Conditioner" filterMatchMode="equals" style="font-size: 85%;">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('placesTable').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{place.hasAirConditioner ? 'Yes': 'No'}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.hasBlackBoard}" headerText="BlackBoard" filterMatchMode="equals" style="font-size: 85%;">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('placesTable').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{place.hasBlackBoard ? 'Yes': 'No'}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.hasWhiteBoard}" headerText="WhiteBoard" filterMatchMode="equals" style="font-size: 85%;">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('placesTable').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{place.hasWhiteBoard ? 'Yes': 'No'}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.hasWiFiCoverage}" headerText="WiFi Coverage" filterMatchMode="equals" style="font-size: 85%;">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('placesTable').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{place.hasWiFiCoverage ? 'Yes': 'No'}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.hasLanCable}" headerText="Lan Cable" filterMatchMode="equals" style="font-size: 85%;">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('placesTable').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{place.hasLanCable ? 'Yes': 'No'}" />
+                    </p:column>
+
+                    <p:column filterBy="#{place.hasMicrophone}" headerText="Microphone" filterMatchMode="equals" style="font-size: 85%;">
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('placesTable').filter()">
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="All" itemValue="" />
+                                <f:selectItem itemLabel="Yes" itemValue="true" />
+                                <f:selectItem itemLabel="No" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <h:outputText value="#{place.hasMicrophone ? 'Yes': 'No'}" />
+                    </p:column>
+
+                </p:dataTable>
+            </p:tab>
+
+            <p:tab id="dateandtime" title="Date And Time">
+                <p:panel header="Choose Date and Time" style="margin-top: 0.5%" >
+                    <p:messages />
+                    <h:panelGrid columns="1">
+
+                        <p:calendar id="date" value="#{reserveMB.selectedDate}" mode="inline" mindate="#{reserveMB.currentDate}"
+                                    maxdate="#{reserveMB.maxDate}" required="true" requiredMessage="You sould select a date"   />
+
+                        <p:commandButton value="Show Free Timeslots" action="#{reserveMB.getFreeTimeSlots}" update="timeslottable" icon="ui-icon-check" style="margin: 5%"  />
+                    </h:panelGrid>
+
+                    <p:dataTable id="timeslottable" var="timeslot" value="#{reserveMB.freeTimeSlotList}"
+                                 selection="#{reserveMB.selectedTimeSlots}" rowKey="#{timeslot.id}"
+                                 style="width:40% ;margin-bottom:0" reflow="true" emptyMessage="No timeslot found"
+                                 scrollable="true" scrollHeight="160" >
+
+                        <p:column selectionMode="multiple" style="width: 35% ;text-align:center"/>
+                        <p:column headerText="Timeslot" style="text-align:center" sortBy="timeslot.id">
+                            <h:outputText value="#{timeslot.interval}" />
+                        </p:column>
+                    <!--    <p:column headerText="Timeslot" style="text-align:center">
+                            <h:outputText value="#{timeslot.id}" />
+                        </p:column>-->
+                    </p:dataTable>
+
+                </p:panel>
+            </p:tab>
+
+
+            <p:tab id="confirm" title="Confirmation">
+                <p:panel header="Confirmation">
+                        <h:panelGrid columns="2" >
+                            <h:outputText value="Selected place: " />
+                            <h:outputText value="#{reserveMB.selectedPlace.name}" styleClass="outputLabel"/>
+
+                            <h:outputText value="Selected date: " />
+                            <h:outputText value="#{reserveMB.formatedSelectedDate}" styleClass="outputLabel"/>
+                        </h:panelGrid>
+
+                    <p:dataTable var="timeslot" value="#{reserveMB.selectedTimeSlots}"  reflow="true" style="width:30%" >
+                        <p:column headerText="Selected timeslots" style="text-align:center">
+                            <h:outputText value="#{timeslot.interval}" />
+
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:commandButton value="Reserve" action="#{reserveMB.saveReservation}" ajax="false" update="growl" process="@this" style="margin-top: 0.5%"/>
+                </p:panel>
+            </p:tab>
+        </p:wizard>
+
+    </h:form>
+
+
+</h:body>
+</html>

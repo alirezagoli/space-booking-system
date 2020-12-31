@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xml:lang="en" lang="en">
+
+<h:head>
+    <title>Weclcome</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <h:outputStylesheet library="css" name="bootstrap.min.css"></h:outputStylesheet>
+    <h:outputStylesheet library="css" name="bootstrap-theme.min.css"></h:outputStylesheet>
+    <h:outputStylesheet library="css" name="font-awesome.min.css"></h:outputStylesheet>
+    <h:outputStylesheet library="css" name="bootstrap-social.css"></h:outputStylesheet>
+    <h:outputScript library="javascript" name="jquery-3.1.0.min.js"></h:outputScript>
+    <h:outputScript library="javascript" name="bootstrap.min.js"></h:outputScript>
+    <h:outputStylesheet>
+        @import url(http://fonts.googleapis.com/css?family=Roboto:400);
+
+        body {
+            background-color: #fff;
+            -webkit-font-smoothing: antialiased;
+            font: normal 14px Roboto, arial, sans-serif;
+        }
+
+        .container {
+            padding: 25px;
+            position: fixed;
+        }
+
+        .form-login {
+            background-color: #EDEDED;
+            padding-top: 10px;
+            padding-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border-radius: 15px;
+            border-color: #d2d2d2;
+            border-width: 5px;
+            box-shadow: 0 1px 0 #cfcfcf;
+            margin-top: 20%;
+        }
+
+        h4 {
+            border: 0 solid #fff;
+            border-bottom-width: 1px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .form-control {
+            border-radius: 10px;
+        }
+
+        .wrapper {
+            text-align: center;
+        }
+
+    </h:outputStylesheet>
+</h:head>
+<body>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-offset-5 col-md-4  ">
+            <div class="form-login">
+                <form action="/j_spring_security_check" method="post">
+                    <h4>Welcome To IUT Reservation System</h4>
+                    <input type="text" id="j_username" name="j_username" class="form-control input-sm chat-input"
+                           placeholder="username"/>
+                    <br/>
+                    <input type="password" id="j_password" name="j_password" class="form-control input-sm chat-input"
+                           placeholder="password"/>
+                    <br/>
+
+                    <div class="wrapper">
+
+            <span class="group-btn">
+                 <input class="btn btn-primary btn-md" type="submit" value="Login"/>
+                <!--<a href="#" class="btn btn-primary btn-md">login <i class="fa fa-sign-in"></i></a>-->
+            </span>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
